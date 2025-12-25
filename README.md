@@ -64,6 +64,9 @@ llm-physical-reasoning-framework/
 ├── requirements.txt
 └── .gitignore
 
+## Datasets
+This project uses a curated set of physics-reasoning datasets, including PIQA, CLEVRER, PHYRE, IntPhys, and TraySim. These datasets cover intuitive physics, causal dynamics, counterfactual reasoning, and multi-body physical interactions. Detailed documentation is available in `data/`.
+
 ## Research Questions
 1. How well do current LLMs perform on diverse physical reasoning tasks?
 2. What are the dominant failure modes?
