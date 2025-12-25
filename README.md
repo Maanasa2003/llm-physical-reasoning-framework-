@@ -86,7 +86,7 @@ This project is released under an **All Rights Reserved** license.
 ## Citation
 A formal citation will be added upon publication.
 
-##Author
+## Author
 Maanasa Panchakarla
 Masters in Artificial Intelligence (Dublin City University)
 Interested in Quantum AI research, drug discovery, and space exploration.
