@@ -41,6 +41,8 @@ Evaluation scripts:
 - generate prompts for the LLM
 - query
 
+the below flow chart visually explains the repo structure entirely
+
 ```mermaid
 flowchart TD
 
@@ -49,8 +51,3 @@ B --> C[Evaluation Script<br>src/evaluation/]
 C --> D[Compute Metrics]
 D --> E[Save Results<br>docs/results/]
 E --> F[Analyze Failure Modes<br>docs/failure_modes/]
-
-This shows the full flow:
-dataset → preprocess → evaluation → metrics → results → failure modes
-
-The above diagram visually explains the repo structure
