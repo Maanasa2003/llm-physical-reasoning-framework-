@@ -40,3 +40,17 @@ Evaluation scripts:
 - define the task format
 - generate prompts for the LLM
 - query
+
+```mermaid
+flowchart TD
+
+A[Load Dataset<br>src/utils/dataset_loader.py] --> B[Preprocess Data<br>src/data/preprocess.py]
+B --> C[Evaluation Script<br>src/evaluation/]
+C --> D[Compute Metrics]
+D --> E[Save Results<br>docs/results/]
+E --> F[Analyze Failure Modes<br>docs/failure_modes/]
+
+This shows the full flow:
+dataset → preprocess → evaluation → metrics → results → failure modes
+
+The above diagram visually explains the repo structure
