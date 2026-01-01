@@ -1,0 +1,1 @@
+# Stores reusable prompt templates for physical reasoning
