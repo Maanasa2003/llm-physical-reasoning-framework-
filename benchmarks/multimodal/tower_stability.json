@@ -1,0 +1,10 @@
+{
+  "id": "tower_stability_image",
+  "scenario": "The image shows a stack of four blocks, with the top block shifted far to the right.",
+  "image_description": "Four rectangular blocks stacked vertically. The top block is offset so that more than half of it hangs off the block below.",
+  "question": "Will the tower collapse?",
+  "domain": "multimodal_intuitive_physics",
+  "expected_answer": "yes",
+  "reasoning_expectation": "The top block's center of mass lies outside the support base, causing instability.",
+  "tags": ["stability", "center_of_mass", "stacking", "visual_reasoning"]
+}

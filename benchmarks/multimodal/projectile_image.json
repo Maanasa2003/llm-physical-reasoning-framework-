@@ -1,0 +1,10 @@
+{
+  "id": "projectile_motion_image",
+  "scenario": "The image shows a ball being launched at an angle of about 45 degrees.",
+  "image_description": "A ball is drawn with a trajectory arc starting from the ground at a 45-degree angle.",
+  "question": "Will the ball land farther if the launch angle is increased to 60 degrees?",
+  "domain": "multimodal_physics",
+  "expected_answer": "no",
+  "reasoning_expectation": "Projectile range is maximized at 45 degrees; increasing to 60 degrees reduces horizontal distance.",
+  "tags": ["projectile_motion", "angles", "visual_reasoning"]
+}

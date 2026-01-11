@@ -1,0 +1,8 @@
+{
+  "id": "ramp_vs_freefall",
+  "scenario": "A ball rolls down a frictionless ramp from height h. Another ball is dropped from the same height h. Which one reaches the ground first?",
+  "domain": "intuitive_physics",
+  "expected_answer": "the dropped ball",
+  "reasoning_expectation": "The ramp ball loses some acceleration to horizontal motion, so its vertical acceleration is less than g.",
+  "tags": ["gravity", "acceleration", "qualitative_reasoning"]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "support_failure",
+  "scenario": "A stack of three blocks is arranged such that the top block is shifted far to the right, but still partially supported by the middle block. The middle block is centered on the bottom block. Will the top block fall?",
+  "domain": "intuitive_physics",
+  "expected_answer": "yes",
+  "reasoning_expectation": "The top block's center of mass lies outside the support base provided by the middle block, so it will rotate and fall.",
+  "tags": ["stability", "center_of_mass", "stacking", "support_relations"]
+}

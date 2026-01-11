@@ -1,21 +1,25 @@
-# Stores reusable prompt templates for physical reasoning
 def build_reasoning_prompt(question: str) -> str:
-    """
-    Build a structured reasoning prompt for the LLM.
-    """
+    return f"""
+You are a physics reasoning engine.
 
-    prompt = f"""
-You are an advanced reasoning model. Analyze the following scenario step-by-step.
+You MUST answer the scenario's question directly.
+You MUST output ONLY valid JSON.
+No explanations. No paragraphs. No markdown. No lists. No commentary.
 
-Question:
-     question
+Think step-by-step inside a hidden block:
+<!-- hidden reasoning -->
 
-Instructions:
-1. Think through the problem logically.
-2. Break your reasoning into clear steps.
-3. Provide a final answer at the end.
+Then output EXACTLY this JSON:
 
-Begin your reasoning now.
-"""
+{{
+  "final_answer": "<answer>"
+}}
 
-    return prompt.strip()
+Answer rules:
+- If the question asks "will", "is", "are", "does", "do", "can", answer ONLY "yes" or "no".
+- If the question asks "which", answer with the object or phrase.
+- If the question asks "how long", "how fast", "how far", "how much", or contains numbers, answer with a NUMBER only.
+- If the question is descriptive (like an image), answer "yes" if the situation is physically stable or normal, otherwise "no".
+
+Scenario: {question}
+""".strip()

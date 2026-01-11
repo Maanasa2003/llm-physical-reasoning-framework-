@@ -1,0 +1,10 @@
+{
+  "id": "block_on_ramp_image",
+  "scenario": "The image shows a block resting on a ramp inclined at 30 degrees. The block appears stationary.",
+  "image_description": "A wooden block sits on a smooth ramp inclined at 30 degrees. No friction is visible.",
+  "question": "Will the block slide down the ramp?",
+  "domain": "multimodal_intuitive_physics",
+  "expected_answer": "yes",
+  "reasoning_expectation": "On a frictionless ramp, any non-zero incline produces acceleration down the slope.",
+  "tags": ["ramp", "gravity", "frictionless", "visual_reasoning"]
+}

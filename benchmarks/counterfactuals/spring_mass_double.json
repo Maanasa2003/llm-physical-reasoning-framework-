@@ -1,0 +1,20 @@
+{
+  "id": "spring_mass_double",
+  "scenario": "A mass-spring system oscillates with mass m = 2 kg and spring constant k = 50 N/m.",
+  "counterfactual": "What if the mass were doubled to 4 kg?",
+  "domain": "oscillations",
+  "equation": "T - 2*pi*sqrt(m/k)",
+  "solve_for": "T",
+  "known_values_original": {
+    "m": 2,
+    "k": 50
+  },
+  "known_values_counterfactual": {
+    "m": 4,
+    "k": 50
+  },
+  "expected_original_answer": 1.26,
+  "expected_counterfactual_answer": 1.78,
+  "tolerance": 0.05,
+  "tags": ["counterfactual", "oscillations", "spring", "causal_reasoning"]
+}

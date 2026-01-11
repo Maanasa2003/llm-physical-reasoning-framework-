@@ -1,0 +1,8 @@
+{
+  "id": "heavier_falls_faster",
+  "scenario": "Two balls of different masses are dropped from the same height in a vacuum. Which one hits the ground first?",
+  "domain": "intuitive_physics",
+  "expected_answer": "they hit at the same time",
+  "reasoning_expectation": "In a vacuum, gravitational acceleration is independent of mass.",
+  "tags": ["gravity", "free_fall", "misconceptions"]
+}

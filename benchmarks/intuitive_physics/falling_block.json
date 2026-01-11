@@ -1,0 +1,8 @@
+{
+  "id": "falling_block",
+  "scenario": "A block is placed on a table such that 70% of its length hangs off the edge. Will the block fall?",
+  "domain": "intuitive_physics",
+  "expected_answer": "yes",
+  "reasoning_expectation": "The center of mass lies beyond the support base, so the block will rotate and fall.",
+  "tags": ["stability", "center_of_mass", "support_relations"]
+}

@@ -4,57 +4,72 @@ from src.core.prompt_template import build_reasoning_prompt
 from src.core.parsing import parse_answer
 from src.core.scoring import score_answer
 from src.models.llm_interface import LLMInterface
+from src.core.symbolic_solver import solve_equation
 
 
 class ReasoningEngine:
-    """
-    High-level orchestrator for:
-      1. Building a reasoning prompt
-      2. Querying the LLM
-      3. Parsing the LLM output
-      4. Scoring the parsed answer
-    """
 
     def __init__(
         self,
-        model_name: str = "meta-llama/Llama-3.2-1B-Instruct",
+        model_name: str = "meta-llama/Meta-Llama-3-70B-Instruct",
         expected_answer: Optional[str] = None,
+        scenario: Optional[str] = None
     ):
         """
-        :param model_name: HF model routed via the Hugging Face Router.
-        :param expected_answer: Optional ground-truth answer for scoring.
+        If scenario is provided here, run() can be called without arguments.
+        If scenario is NOT provided here, run() must be called with a scenario.
         """
         self.llm = LLMInterface(model_name=model_name)
         self.expected_answer = expected_answer
+        self.scenario = scenario
 
-    def run(self, scenario: str) -> Dict[str, Any]:
+    def run(self, scenario: Optional[str] = None) -> Dict[str, Any]:
         """
-        Run the full reasoning pipeline on a given physical scenario.
+        Runs the reasoning engine on a scenario.
+        Priority:
+        1. scenario passed to run()
+        2. scenario stored in self.scenario
+        """
 
-        :param scenario: Natural-language description of the problem.
-        :return: Dictionary containing:
-            - prompt
-            - raw_output
-            - reasoning
-            - final_answer
-            - score
-            - correct
-            - feedback
-        """
-        # 1. Build the prompt
+        # Determine which scenario to use
+        if scenario is None:
+            if self.scenario is None:
+                raise ValueError(
+                    "No scenario provided. Pass a scenario to ReasoningEngine() or to run()."
+                )
+            scenario = self.scenario
+
+        # Build prompt
         prompt = build_reasoning_prompt(scenario)
 
-        # 2. Query the LLM
-        raw_output = self.llm.generate(prompt)
+        # Query LLM
+        raw_output = self.llm.generate(prompt, max_tokens=1024)
 
-        # 3. Parse the output into structure
+        # Parse JSON
         parsed = parse_answer(raw_output)
 
-        # 4. Score against expected answer (if provided)
+        # Optional symbolic solving
+        equation = parsed.get("equation")
+        solve_for = parsed.get("solve_for")
+        known_values = parsed.get("known_values")
+
+        if equation and solve_for and known_values:
+            try:
+                solutions = solve_equation(
+                    equation_str=equation,
+                    solve_for=solve_for,
+                    known_values=known_values
+                )
+                if solutions:
+                    parsed["sympy_solution"] = str(float(solutions[0]))
+            except Exception as e:
+                parsed["sympy_solution"] = None
+                parsed["sympy_error"] = str(e)
+
+        # Score the answer
         scored = score_answer(parsed, expected_answer=self.expected_answer)
 
-        # 5. Return enriched result
-        result = {
+        return {
             "prompt": prompt,
             "raw_output": raw_output,
             "reasoning": scored.get("reasoning"),
@@ -63,4 +78,4 @@ class ReasoningEngine:
             "correct": scored.get("correct"),
             "feedback": scored.get("feedback"),
         }
-        return result
+    

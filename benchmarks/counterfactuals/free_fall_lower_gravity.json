@@ -1,0 +1,20 @@
+{
+  "id": "free_fall_lower_gravity",
+  "scenario": "A ball is dropped from a height of 20 meters on Earth (g = 9.81 m/s^2).",
+  "counterfactual": "What if the same ball were dropped from the same height on the Moon (g = 1.62 m/s^2)?",
+  "domain": "kinematics",
+  "equation": "h0 - 0.5*g*t**2",
+  "solve_for": "t",
+  "known_values_original": {
+    "h0": 20,
+    "g": 9.81
+  },
+  "known_values_counterfactual": {
+    "h0": 20,
+    "g": 1.62
+  },
+  "expected_original_answer": 2.02,
+  "expected_counterfactual_answer": 4.97,
+  "tolerance": 0.05,
+  "tags": ["counterfactual", "gravity", "free_fall", "causal_reasoning"]
+}

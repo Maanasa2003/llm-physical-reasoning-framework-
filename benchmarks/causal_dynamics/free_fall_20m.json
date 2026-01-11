@@ -1,0 +1,14 @@
+{
+  "id": "free_fall_20m",
+  "scenario": "A ball is dropped from a height of 20 meters. Ignore air resistance. How long does it take to hit the ground?",
+  "domain": "kinematics",
+  "equation": "h0 - 0.5*g*t**2",
+  "solve_for": "t",
+  "known_values": {
+    "h0": 20,
+    "g": 9.81
+  },
+  "expected_answer": 2.02,
+  "tolerance": 0.05,
+  "tags": ["free_fall", "gravity", "causal_dynamics", "time_of_flight"]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "block_on_ramp_no_friction",
+  "scenario": "A block slides down a ramp with angle 30 degrees and friction coefficient μ = 0.2.",
+  "counterfactual": "What if friction were removed (μ = 0)?",
+  "domain": "dynamics",
+  "equation": "a - (g*sin(theta) - mu*g*cos(theta))",
+  "solve_for": "a",
+  "known_values_original": {
+    "g": 9.81,
+    "theta": 0.5236,
+    "mu": 0.2
+  },
+  "known_values_counterfactual": {
+    "g": 9.81,
+    "theta": 0.5236,
+    "mu": 0.0
+  },
+  "expected_original_answer": 3.43,
+  "expected_counterfactual_answer": 4.91,
+  "tolerance": 0.05,
+  "tags": ["counterfactual", "friction", "ramp", "causal_reasoning"]
+}
