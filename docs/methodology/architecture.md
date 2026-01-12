@@ -1,119 +1,112 @@
-# Project Architecture
+# Architecture Overview
 
-This document describes the structure, organization, and design principles of the repository.  
-The goal is to maintain clarity, modularity, and reproducibility while supporting multiple physical‑reasoning datasets and evaluation tasks.
+This document describes the system architecture of the Physics Reasoning Engine, a hybrid framework that combines a language model with symbolic mathematics to solve physics word problems reliably and transparently.
 
-## 1. Repository Structure
-The project follows a modular, pipeline‑oriented layout:
-src/
-    pipeline/
-        run_pipeline.py
-    evaluation/
-        piqa_eval.py
-        clevrer_eval.py
-        phyre_eval.py
-        intphys_eval.py
-        traysim_eval.py
-    data/
-        preprocess.py
-    utils/
-        dataset_loader.py
-        logging_utils.py
-        config.py
-data/
-    raw/
-    processed/
-    DATASETS.md
-docs/
-    failure_modes/
-    methodology/
-        pipeline.md
-        architecture.md
-        evaluation.md
-    results/
-Each directory has a clear purpose and isolates responsibilities to keep the codebase clean and scalable.
+## 1. High‑Level Design
 
-## 2. Directory Responsibilities
-### **src/pipeline/**
-Contains the main orchestration script (`run_pipeline.py`) that coordinates:
-- dataset loading  
-- preprocessing  
-- evaluation  
-- result aggregation  
-This is the entry point for running the full evaluation pipeline.
+The system follows a hybrid LLM + SymPy pipeline:
 
-### **src/evaluation/**
-Contains evaluation logic for each dataset.  
-Each file corresponds to one dataset and defines:
-- task format  
-- prompt generation  
-- model querying  
-- metric computation  
-This modular design allows you to add new datasets without modifying the core pipeline.
+1. User provides a natural‑language scenario through the CLI.
+2. The LLM parses the scenario, extracts variables, and proposes equations.
+3. The symbolic engine (SymPy) validates and solves the equations.
+4. The LLM generates a final explanation using the symbolic solution.
+5. The CLI displays the structured result.
 
-### **src/data/**
-Contains preprocessing utilities.  
-`preprocess.py` standardizes dataset formats into a unified structure so that evaluation scripts can operate consistently across datasets.
+This architecture ensures interpretability, reproducibility, reduced hallucination, and consistent output formatting.
 
-### **src/utils/**
-Contains reusable utilities shared across the project:
-- `dataset_loader.py` — loads datasets via streaming or URLs  
-- `logging_utils.py` — centralized logging configuration  
-- `config.py` — constants, paths, and global settings  
+## 2. System Components
 
-This keeps the rest of the code clean and avoids duplication.
+### 2.1 CLI Layer (`cli.py`)
+- Accepts user input (`--scenario` or `--benchmark`)
+- Routes requests to the appropriate pipeline
+- Handles argument parsing and validation
+- Ensures consistent user experience
 
-### **data/**
-Stores dataset‑related documentation and optional cached data.
-- `raw/` — unprocessed or streamed data (optional)  
-- `processed/` — normalized or preprocessed data (optional)  
-- `DATASETS.md` — documentation for all datasets used in the project  
-Large datasets are **not** stored in the repo; they are loaded online.
+### 2.2 LLM Reasoning Module
+Responsible for:
+- Extracting variables
+- Identifying knowns and unknowns
+- Proposing equations
+- Generating the final explanation
 
-### **docs/**
-Contains all project documentation.
-- `methodology/` — pipeline, architecture, evaluation  
-- `failure_modes/` — analysis of model weaknesses  
-- `results/` — evaluation outputs and summaries  
-This mirrors the structure of a research paper: methodology → results → analysis.
+Small models may produce incomplete reasoning or empty outputs; these limitations are documented in the failure modes.
 
-## 3. Design Principles
-### **Modularity**
+### 2.3 Symbolic Solver Module
+Uses SymPy to:
+- Parse equations
+- Solve for unknowns
+- Validate LLM‑generated expressions
+- Catch algebraic inconsistencies
+
+This module acts as a grounding mechanism to reduce hallucination.
+
+### 2.4 Benchmark Engine
+- Loads benchmark problems
+- Runs them through the pipeline
+- Normalizes outputs
+- Scores predictions
+- Produces accuracy metrics (currently 7/11, limited by model capacity)
+
+### 2.5 Logging and Error Handling
+- Captures malformed equations
+- Detects empty LLM outputs
+- Flags symbolic parsing failures
+- Provides actionable error messages
+
+## 3. Data Flow
+User Input → CLI → LLM Reasoning → Symbolic Solver → LLM Explanation → Output
+For benchmarks:
+Benchmark JSON → Pipeline → Normalizer → Scorer → Report
+
+## 4. Design Principles
+
+### 4.1 Modularity
 Each component is isolated:
-- dataset loading  
-- preprocessing  
-- evaluation  
-- pipeline orchestration  
-This makes the system easy to extend and debug.
+- CLI
+- LLM prompts
+- Symbolic solver
+- Benchmark runner
+- Utilities
 
-### **Clean Code**
-The project follows:
-- short, single‑purpose functions  
-- type hints  
-- docstrings  
-- consistent naming conventions  
-- no hardcoded paths  
-This ensures readability and maintainability.
+### 4.2 Transparency
+Every step is visible:
+- Extracted variables
+- Proposed equations
+- Symbolic solutions
+- Final explanation
 
-### **Reproducibility**
-- datasets loaded online  
-- deterministic evaluation scripts  
-- documented pipeline and architecture  
-- no large files committed to the repo  
-Anyone can reproduce results by running the pipeline.
+### 4.3 Scalability
+The architecture supports:
+- Larger LLMs
+- More complex physics domains
+- Additional symbolic tools
+- Dataset‑based training (if added later)
 
-### **Scalability**
-New datasets, evaluation tasks, or models can be added by:
-- creating a new loader  
-- adding a new evaluation script  
-- updating the pipeline  
-No existing components need to be rewritten.
+### 4.4 Reproducibility
+- Deterministic symbolic solving
+- Structured output schema
+- Clear separation of concerns
 
-### **Transparency**
-All design decisions and pipeline steps are documented in:
-`docs/methodology/`
-This makes the project easy to understand for reviewers, collaborators, and future contributors.
+## 5. Known Limitations
 
-## 4. Summary
-This architecture provides a clean, modular foundation for evaluating physical reasoning in large language models.  
-It balances simplicity with scalability and mirrors the structure of high‑quality research repositories.
+### 5.1 Model Capacity
+The current benchmark score (7/11) is limited by the small LLM’s reasoning ability, not by the architecture.
+
+### 5.2 Equation Parsing
+LLM‑generated equations may be incomplete, incorrect, or ambiguous.
+
+### 5.3 Unit Handling
+Mixed or missing units can cause symbolic failures.
+
+### 5.4 Scenario Ambiguity
+Underspecified problems may lead to multiple valid interpretations.
+All limitations are documented in `docs/failure_modes/`.
+
+## 6. Future Extensions
+
+- Support for larger LLMs
+- Multi‑step symbolic derivations
+- Unit‑aware symbolic algebra
+- Visual explanations (free‑body diagrams, graphs)
+- Dataset‑based training modules
+- Web UI or API endpoints

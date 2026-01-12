@@ -1,44 +1,86 @@
-# Evaluation Framework
-This document describes how physical reasoning is evaluated across the datasets used in this project. Each dataset targets a different dimension of physical understanding.
+# Evaluation
 
-## 1. PIQA
-**Task:** Physical commonsense multiple-choice  
-**Format:** Two candidate solutions  
-**Metric:** Accuracy  
-**Evaluation Script:** `src/evaluation/piqa_eval.py`
+This document explains how the Physics Reasoning Engine is evaluated using a small benchmark of physics word problems. The goal of the evaluation is to measure the system’s ability to extract variables, generate equations, solve them symbolically, and produce correct final answers.
 
-## 2. CLEVRER
-**Task:** Causal reasoning, temporal reasoning, counterfactuals  
-**Format:** Descriptive, explanatory, predictive, and counterfactual questions  
-**Metrics:** 
-- Causal accuracy  
-- Descriptive accuracy  
-- Counterfactual correctness  
-**Evaluation Script:** `src/evaluation/clevrer_eval.py`
+## 1. Evaluation Method
 
-## 3. PHYRE
-**Task:** Physical puzzle solving  
-**Format:** Agent must choose an action that solves a physics-based puzzle  
-**Metric:** Success rate  
-**Evaluation Script:** `src/evaluation/phyre_eval.py`
+The evaluation uses a set of benchmark problems stored in JSON format. Each benchmark entry contains:
+- A natural‑language physics scenario
+- The expected final answer
+- Optional metadata (units, variable names, etc.)
 
-## 4. IntPhys
-**Task:** Intuitive physics (object permanence, collisions, occlusions)  
-**Format:** Plausible vs implausible video sequences  
-**Metric:** Violation detection accuracy  
-**Evaluation Script:** `src/evaluation/intphys_eval.py`
+The CLI provides a `--benchmark` mode that runs all benchmark problems through the full reasoning pipeline:
 
-## 5. TraySim (LLMPhy)
-**Task:** Multi-body physical interactions  
-**Format:** Predicting stability, motion, or outcomes  
-**Metric:** Stability prediction accuracy  
-**Evaluation Script:** `src/evaluation/traysim_eval.py`
+1. Parse scenario  
+2. Generate variables and equations using the LLM  
+3. Solve equations using SymPy  
+4. Produce a final answer  
+5. Compare the predicted answer with the expected answer  
 
-## Evaluation Flow
-1. Load dataset  
-2. Preprocess into unified format  
-3. Generate prompts  
-4. Query LLM  
-5. Compute metrics  
-6. Save results to `docs/results/`  
-7. Analyze failure modes in `docs/failure_modes/`
+The scorer then reports:
+- Total number of problems
+- Number of correct predictions
+- Final accuracy
+
+## 2. Current Results
+
+The current benchmark accuracy is:
+
+**7 / 11 correct**
+
+This score reflects the limitations of the small LLM used in the project. The architecture itself is capable of higher accuracy when paired with a more capable model.
+
+## 3. Common Sources of Error
+
+The incorrect benchmark cases typically arise from:
+
+### 3.1 Model Capacity Limitations
+Small models may:
+- Fail to generate complete equations  
+- Produce empty or partially structured outputs  
+- Mis-handle algebraic steps  
+- Misinterpret the scenario  
+
+These issues are expected and documented in the failure modes.
+
+### 3.2 Equation Parsing Issues
+Some predictions fail because:
+- The LLM outputs malformed expressions  
+- Variable names are inconsistent  
+- The symbolic solver cannot parse the equations  
+
+### 3.3 Unit Handling
+Errors occur when:
+- Units are missing  
+- Units are mixed (e.g., km/h with m/s)  
+- The LLM outputs unit‑annotated variables that SymPy cannot process  
+
+### 3.4 Formatting Mismatches
+Even when the reasoning is correct, the answer may be marked incorrect due to:
+- Minor formatting differences  
+- Extra text around the answer  
+- Missing units  
+
+## 4. Interpretation of Results
+
+The benchmark score should be interpreted as a **model‑limited performance**, not a limitation of the system design.
+
+The architecture is intentionally modular so that:
+- Larger LLMs can be plugged in  
+- More complex benchmarks can be added  
+- Symbolic reasoning can be extended  
+
+With a stronger model, accuracy is expected to increase significantly.
+
+## 5. Future Improvements
+
+Planned enhancements to the evaluation pipeline include:
+
+- More robust normalization of predicted answers  
+- Unit‑aware comparison  
+- Partial‑credit scoring for multi‑step reasoning  
+- Expanded benchmark coverage  
+- Support for multiple physics domains  
+- Automated error categorization  
+
+These improvements will make the evaluation more reliable and more informative for future development.
