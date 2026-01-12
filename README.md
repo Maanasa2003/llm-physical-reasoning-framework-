@@ -192,10 +192,9 @@ These limitations define clear directions for future research and engineering im
 This project and all associated files are the intellectual property of the author.  
 No part of this repository may be copied, modified, distributed, or used in any form  
 without explicit written permission from the author.
-
 © 2026 Manasa. All Rights Reserved.
 
-Author:
-Maanasa Panchakarla
+# Author:
+### Maanasa Panchakarla
 Master’s in Artificial Intelligence, Dublin City University (DCU)  
 Focused on hybrid neural–symbolic reasoning, llm-physics understanding, quantum AI, and space‑oriented scientific intelligence
