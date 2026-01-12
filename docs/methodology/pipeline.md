@@ -25,7 +25,6 @@ The output is a structured representation that the next stage can use.
 
 Example output structure:
 
-```json
 {
   "variables": {
     "v": "initial velocity",
