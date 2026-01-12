@@ -65,7 +65,6 @@ A raw natural‑language scenario, for example:
 ### Output
 A structured JSON‑like representation:
 
-```json
 {
   "variables": {
     "a": "acceleration",
