@@ -97,11 +97,11 @@ Requires:
 - Python 3.10+
 - A Hugging Face API key (or any supported LLM provider)
 Install dependencies:
-```bash
 pip install -r requirements.txt
 Set your API key:
 export HF_API_KEY="your_key_here"
-Running the Project
+
+# Running the Project
 
 ## Run a single physics scenario
 python cli.py --scenario " your scenario here"
